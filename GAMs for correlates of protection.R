@@ -47,14 +47,14 @@ for(age in age_list){
                        ever_lthc=1,visit_freq=1,smoke_now=1,contact_hospital=1,contact_carehome=1,dur_vac_inf=210,variant="Vaccination",health_condition="No")
   newdata <- rbind(newdata,newdata)
   
-  dat_ors_vac <- data.frame(assay_round = seq(0,8000,20))
+  dat_ors_vac <- data.frame(assay_round = c(16,seq(20,8000,20)))
   dat_ors_vac$or <- NA
   dat_ors_vac$ll <- NA
   dat_ors_vac$ul <- NA
   
   
   for (i in 1:nrow(dat_ors_vac)) {
-    temp <- getor_vaccine_type(newdata=newdata,  contrast=c(0,dat_ors_vac$assay_round[i]),
+    temp <- getor_vaccine_type(newdata=newdata,  contrast=c(16,dat_ors_vac$assay_round[i]),
                                model = m)
     dat_ors_vac$or[i] <- temp[1]
     dat_ors_vac$ll[i] <- temp[2]
@@ -85,14 +85,14 @@ for(age in age_list){
   newdata <- rbind(newdata,newdata)
   newdata$variant <- c("Vaccination","Pre-Alpha/Alpha")
   
-  dat_ors_vac <- data.frame(assay_round = seq(0,8000,20))
+  dat_ors_vac <- data.frame(assay_round = seq(80,8000,20))
   dat_ors_vac$or <- NA
   dat_ors_vac$ll <- NA
   dat_ors_vac$ul <- NA
   
   
   for (i in 1:nrow(dat_ors_vac)) {
-    temp <- getor_vaccine_type(newdata=newdata,  contrast=c(0,dat_ors_vac$assay_round[i]),
+    temp <- getor_vaccine_type(newdata=newdata,  contrast=c(16,dat_ors_vac$assay_round[i]),
                                model = m)
     dat_ors_vac$or[i] <- temp[1]
     dat_ors_vac$ll[i] <- temp[2]
@@ -112,7 +112,7 @@ results_alpha=do.call(rbind,results_list)
 
 
 
-## prediction for Delta/BA.1 group
+## prediction for Delta group
 
 age_list=seq(20,80,5)
 results_list=list()
@@ -122,16 +122,16 @@ for(age in age_list){
                        hhsizegroup=2,rural_urban_class=2, ever_care_home_worker=1,patient_facing_clean_ever=1, ever_personfacing_socialcare=1,
                        ever_lthc=1,visit_freq=1,smoke_now=1,contact_hospital=1,contact_carehome=1,dur_vac_inf=180,health_condition="No")
   newdata <- rbind(newdata,newdata)
-  newdata$variant <- c("Vaccination","Delta/BA.1")
+  newdata$variant <- c("Vaccination","Delta")
   
-  dat_ors_vac <- data.frame(assay_round = seq(0,8000,20))
+  dat_ors_vac <- data.frame(assay_round = seq(100,8000,20))
   dat_ors_vac$or <- NA
   dat_ors_vac$ll <- NA
   dat_ors_vac$ul <- NA
   
   
   for (i in 1:nrow(dat_ors_vac)) {
-    temp <- getor_vaccine_type(newdata=newdata,  contrast=c(0,dat_ors_vac$assay_round[i]),
+    temp <- getor_vaccine_type(newdata=newdata,  contrast=c(16,dat_ors_vac$assay_round[i]),
                                model = m)
     dat_ors_vac$or[i] <- temp[1]
     dat_ors_vac$ll[i] <- temp[2]
@@ -139,7 +139,7 @@ for(age in age_list){
   }
   
   dat_ors_vac=dat_ors_vac%>%mutate(VE=100*(1-or),VE_ll=100*(1-ul),VE_ul=100*(1-ll))
-  dat_ors_vac$variant="Delta/BA.1"
+  dat_ors_vac$variant="Delta"
   dat_ors_vac$age=age
   
   results_list[[j]]<-dat_ors_vac
@@ -148,6 +148,43 @@ for(age in age_list){
 
 results_delta=do.call(rbind,results_list)
 
+
+
+## prediction for BA.1 group
+
+age_list=seq(20,80,5)
+results_list=list()
+j=1
+for(age in age_list){
+  newdata = data.frame(age_at_visit=age, sex=2,ethnicity_wo=1,study_day=400, region_model=8,imd_pc_new=60,multigen=1,
+                       hhsizegroup=2,rural_urban_class=2, ever_care_home_worker=1,patient_facing_clean_ever=1, ever_personfacing_socialcare=1,
+                       ever_lthc=1,visit_freq=1,smoke_now=1,contact_hospital=1,contact_carehome=1,dur_vac_inf=180,health_condition="No")
+  newdata <- rbind(newdata,newdata)
+  newdata$variant <- c("Vaccination","BA.1")
+  
+  dat_ors_vac <- data.frame(assay_round = seq(140,8000,20))
+  dat_ors_vac$or <- NA
+  dat_ors_vac$ll <- NA
+  dat_ors_vac$ul <- NA
+  
+  
+  for (i in 1:nrow(dat_ors_vac)) {
+    temp <- getor_vaccine_type(newdata=newdata,  contrast=c(16,dat_ors_vac$assay_round[i]),
+                               model = m)
+    dat_ors_vac$or[i] <- temp[1]
+    dat_ors_vac$ll[i] <- temp[2]
+    dat_ors_vac$ul[i] <- temp[3]
+  }
+  
+  dat_ors_vac=dat_ors_vac%>%mutate(VE=100*(1-or),VE_ll=100*(1-ul),VE_ul=100*(1-ll))
+  dat_ors_vac$variant="BA.1"
+  dat_ors_vac$age=age
+  
+  results_list[[j]]<-dat_ors_vac
+  j=j+1
+}
+
+results_ba1=do.call(rbind,results_list)
 
 ## prediction for BA.2 group
 
@@ -161,14 +198,14 @@ for(age in age_list){
   newdata <- rbind(newdata,newdata)
   newdata$variant <- c("Vaccination","BA.2")
   
-  dat_ors_vac <- data.frame(assay_round = seq(0,8000,20))
+  dat_ors_vac <- data.frame(assay_round = seq(200,8000,20))
   dat_ors_vac$or <- NA
   dat_ors_vac$ll <- NA
   dat_ors_vac$ul <- NA
   
   
   for (i in 1:nrow(dat_ors_vac)) {
-    temp <- getor_vaccine_type(newdata=newdata,  contrast=c(0,dat_ors_vac$assay_round[i]),
+    temp <- getor_vaccine_type(newdata=newdata,  contrast=c(16,dat_ors_vac$assay_round[i]),
                                model = m)
     dat_ors_vac$or[i] <- temp[1]
     dat_ors_vac$ll[i] <- temp[2]
