@@ -1,9 +1,8 @@
 ####################################################################################################
 # Example of code written by Jia Wei (Nuffield Department of Medicine, University of Oxford)       #
 # for analyses of antibody waning following booster vaccination or breakthrough infection.         #
-# Accompanying paper/preprint: Correlates of protection against SARS-CoV-2 Omicron variant and     #
-# anti-spike antibody responses after a third/booster vaccination or breakthrough infection in the #
-# UK general population                                                                            #
+# Accompanying paper: Protection against SARS-CoV-2 Omicron BA.4/5 variant following booster       #
+# vaccination or breakthrough infection in the UK                                                  #
 ####################################################################################################
 
 library(tidyverse)
